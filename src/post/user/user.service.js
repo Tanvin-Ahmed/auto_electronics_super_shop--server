@@ -4,8 +4,8 @@ module.exports.addUser = async user => {
 	return await UserModel.create(user);
 };
 
-module.exports.getUser = async id => {
-	return await UserModel.findById(id);
+module.exports.getUser = async email => {
+	return await UserModel.findOne({ email });
 };
 
 module.exports.updateUser = async (id, user) => {

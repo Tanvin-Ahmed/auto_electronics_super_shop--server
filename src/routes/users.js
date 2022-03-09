@@ -1,16 +1,22 @@
-var express = require("express");
+const express = require("express");
 const {
-	AddUser,
-	GetUser,
+	SignIn,
+	Login,
 	UpdateUser,
 	DeleteUser,
+	GetUserProfile,
 } = require("../post/user/user.controller");
-var router = express.Router();
+const { refreshToken } = require("../token/refreshToken");
+const { verifyToken } = require("../token/verifyToken");
+
+const router = express.Router();
 
 /* GET users listing. */
-router.post("/add", AddUser);
-router.get("/get", GetUser);
+router.post("/signIn", SignIn);
+router.post("/login", Login);
+router.get("/profile/:email", verifyToken, GetUserProfile);
 router.put("/update", UpdateUser);
 router.delete("/delete", DeleteUser);
+router.post("/refresh-token", refreshToken);
 
 module.exports = router;

@@ -1,27 +1,65 @@
 const mongoose = require("mongoose");
 const { addUser, updateUser, deleteUser, getUser } = require("./user.service");
+const bcrypt = require("bcryptjs");
+const { app } = require("../../config/config");
+const { generateToken } = require("../../token/createToken");
 
-module.exports.AddUser = async (req, res) => {
+const getHashedPassword = (password, saltRound) => {
+	return new Promise((resolve, reject) => {
+		bcrypt.genSalt(saltRound, function (err, salt) {
+			if (err) reject(err);
+			bcrypt.hash(password, salt, function (err, hash) {
+				if (err) reject(err);
+				else resolve(hash);
+			});
+		});
+	});
+};
+
+module.exports.SignIn = async (req, res) => {
 	try {
-		const data = req.body;
-		const user = await addUser(data);
-		return res.status(200).json(user);
+		let data = req.body;
+		const hashedPassword = await getHashedPassword(data.password, 10);
+		data = { ...data, password: hashedPassword };
+		let user = await addUser(data);
+		user = JSON.parse(JSON.stringify(user));
+		delete user.password;
+		const token = generateToken(user);
+		return res.status(200).json({ ...user, token });
 	} catch (error) {
+		if (error.keyValue.email) {
+			return res.status(403).json({ message: "Ops! User Already exists" });
+		}
 		return res
-			.status(500)
-			.json({ error: error, message: "Ops! User not created" });
+			.status(401)
+			.json({ error: error, message: "Ops! SignIn failed" });
 	}
 };
 
-module.exports.GetUser = async (req, res) => {
+module.exports.Login = async (req, res) => {
 	try {
-		const id = mongoose.Types.ObjectId(req.params.id);
-		const user = await getUser(id);
-		return res.status(200).json(user);
+		const data = req.body;
+		let user = await getUser(data.email);
+		user = JSON.parse(JSON.stringify(user));
+		const matchedPassword = await bcrypt.compare(data.password, user.password);
+		delete user.password;
+		if (matchedPassword) {
+			const token = generateToken(user);
+			return res.status(200).json({ ...user, token });
+		}
 	} catch (error) {
-		return res
-			.status(500)
-			.json({ error: error, message: "Ops! User not created" });
+		return res.status(401).json({ error: error, message: "Ops! Login failed" });
+	}
+};
+
+module.exports.GetUserProfile = async (req, res) => {
+	try {
+		const email = req.params.email;
+		const user = await getUser(email);
+		delete user.password;
+		res.status(200).json(user);
+	} catch (error) {
+		return res.status(404).json({ message: "Ops! User not found" });
 	}
 };
 
