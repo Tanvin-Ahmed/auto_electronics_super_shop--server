@@ -12,7 +12,7 @@ const { verifyToken } = require("../token/verifyToken");
 const router = express.Router();
 
 /* GET users listing. */
-router.post("/signIn", SignIn);
+router.post("/register", SignIn);
 router.post("/login", Login);
 router.get("/profile/:email", verifyToken, GetUserProfile);
 router.put("/update", UpdateUser);

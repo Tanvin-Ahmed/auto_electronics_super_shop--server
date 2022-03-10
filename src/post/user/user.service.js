@@ -9,7 +9,7 @@ module.exports.getUser = async email => {
 };
 
 module.exports.updateUser = async (id, user) => {
-	return await UserModel.findByIdAndUpdate(id, user);
+	return await UserModel.findByIdAndUpdate(id, user, { new: true });
 };
 
 module.exports.deleteUser = async id => {
