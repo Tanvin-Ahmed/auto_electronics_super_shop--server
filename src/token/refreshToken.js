@@ -3,7 +3,7 @@ const { app } = require("../config/config");
 
 module.exports.refreshToken = async (req, res) => {
 	try {
-		const token = req.body;
+		const { token } = req.body;
 		const verified = await jwt.verify(token, app.jwt_secret);
 		if (verified) {
 			const newToken = await jwt.sign({ data: verified.data }, app.jwt_secret, {
