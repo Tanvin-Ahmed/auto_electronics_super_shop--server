@@ -65,10 +65,16 @@ module.exports.GetUserProfile = async (req, res) => {
 
 module.exports.UpdateUser = async (req, res) => {
 	try {
-		const id = mongoose.Types.ObjectId(req.params.id);
+		const id = mongoose.Types.ObjectId(req.body._id);
 		const data = req.body;
-		const user = await updateUser(id, data);
-		return res.status(200).json(user);
+		if (data.password) {
+			data.password = await getHashedPassword(data.password, 10);
+		}
+		let user = await updateUser(id, data);
+		user = JSON.parse(JSON.stringify(user));
+		delete user.password;
+		const token = generateToken(user);
+		return res.status(200).json({ ...user, token });
 	} catch (error) {
 		return res
 			.status(500)

@@ -15,8 +15,8 @@ const router = express.Router();
 router.post("/register", SignIn);
 router.post("/login", Login);
 router.get("/profile/:email", verifyToken, GetUserProfile);
-router.put("/update", UpdateUser);
-router.delete("/delete", DeleteUser);
-router.post("/refresh-token", refreshToken);
+router.put("/update", verifyToken, UpdateUser);
+router.delete("/delete", verifyToken, DeleteUser);
+router.post("/refresh-token", verifyToken, refreshToken);
 
 module.exports = router;
