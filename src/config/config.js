@@ -4,4 +4,5 @@ module.exports.app = {
 	user_collection: process.env.USER_COLLECTION,
 	order_collection: process.env.ORDER_COLLECTION,
 	jwt_secret: process.env.JWT_SECRET,
+	stripe_secret: process.env.STRIPE_SECRET,
 };

@@ -12,8 +12,12 @@ module.exports.refreshToken = async (req, res) => {
 			return res.status(200).json(newToken);
 		}
 	} catch (error) {
-		return res
-			.status(400)
-			.json({ message: "Ops! refreshToken not created", error });
+		return res.status(400).json({
+			message:
+				error.message === "jwt expired"
+					? error.message
+					: "Ops! refreshToken not created",
+			error,
+		});
 	}
 };

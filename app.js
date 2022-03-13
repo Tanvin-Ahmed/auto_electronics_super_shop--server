@@ -8,6 +8,7 @@ require("./src/db/db");
 const indexRouter = require("./src/routes/index");
 const usersRouter = require("./src/routes/users");
 const productsRouter = require("./src/routes/productRoutes");
+const orderRouter = require("./src/routes/orderRoutes");
 const {
 	pathNotFound,
 	errorHandler,
@@ -23,6 +24,7 @@ app.use(cors());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/product", productsRouter);
+app.use("/order", orderRouter);
 
 // Error handler
 app.use(pathNotFound);

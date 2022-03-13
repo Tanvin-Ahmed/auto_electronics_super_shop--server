@@ -17,6 +17,6 @@ router.post("/login", Login);
 router.get("/profile/:email", verifyToken, GetUserProfile);
 router.put("/update", verifyToken, UpdateUser);
 router.delete("/delete", verifyToken, DeleteUser);
-router.post("/refresh-token", verifyToken, refreshToken);
+router.post("/refresh-token", refreshToken);
 
 module.exports = router;
