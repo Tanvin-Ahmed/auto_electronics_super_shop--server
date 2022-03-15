@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
-const { createOrder, getOrder, updateOrder } = require("./order.service");
+const {
+	createOrder,
+	getOrder,
+	updateOrder,
+	getMyOrders,
+} = require("./order.service");
 
 module.exports.CreateOrder = async (req, res) => {
 	try {
@@ -47,5 +52,15 @@ module.exports.UpdateOrderToPaid = async (req, res) => {
 		}
 	} catch (error) {
 		res.status(400).json({ message: "Ops! Order not update" });
+	}
+};
+
+module.exports.GetMyOrders = async (req, res) => {
+	try {
+		const user = mongoose.Types.ObjectId(req.user._id);
+		const orders = await getMyOrders(user);
+		return res.status(200).json(orders);
+	} catch (error) {
+		return res.status(404).json({ message: "Ops! Orders not found" });
 	}
 };

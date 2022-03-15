@@ -10,7 +10,7 @@ const {
 
 module.exports.AddProduct = async (req, res) => {
 	try {
-		const data = req.body;
+		const data = { ...req.body, admin: req.user._id };
 		const product = await addProduct(data);
 		return res.status(200).json(product);
 	} catch (error) {

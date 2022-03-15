@@ -1,7 +1,13 @@
 const mongoose = require("mongoose");
-const { addUser, updateUser, deleteUser, getUser } = require("./user.service");
+const {
+	addUser,
+	updateUser,
+	deleteUser,
+	getUser,
+	getAllUsers,
+	getUserById,
+} = require("./user.service");
 const bcrypt = require("bcryptjs");
-const { app } = require("../../config/config");
 const { generateToken } = require("../../token/createToken");
 
 const getHashedPassword = (password, saltRound) => {
@@ -54,8 +60,8 @@ module.exports.Login = async (req, res) => {
 
 module.exports.GetUserProfile = async (req, res) => {
 	try {
-		const email = req.params.email;
-		const user = await getUser(email);
+		const id = mongoose.Types.ObjectId(req.params.id);
+		const user = await getUserById(id);
 		delete user.password;
 		res.status(200).json(user);
 	} catch (error) {
@@ -79,6 +85,28 @@ module.exports.UpdateUser = async (req, res) => {
 		return res
 			.status(500)
 			.json({ error: error, message: "Ops! User not updated" });
+	}
+};
+
+//************* For admin *************//
+
+module.exports.GetAllUsers = async (req, res) => {
+	try {
+		const allUsers = await getAllUsers();
+		return res.status(200).json(allUsers);
+	} catch (error) {
+		return res.status(404).json({ message: "Ops! Users not found", error });
+	}
+};
+
+module.exports.UpdateUserByAdmin = async (req, res) => {
+	try {
+		const id = mongoose.Types.ObjectId(req.params.id);
+		const info = req.body;
+		const updatedUser = await updateUser(id, info);
+		return res.status(200).json(updatedUser);
+	} catch (error) {
+		return res.status(500).json({ message: "Ops! User not update", error });
 	}
 };
 

@@ -13,6 +13,10 @@ module.exports.getOrder = async id => {
 	});
 };
 
+module.exports.getMyOrders = async user => {
+	return await OrderModel.find({ user });
+};
+
 module.exports.updateOrder = async orderInfo => {
 	const id = mongoose.Types.ObjectId(orderInfo._id);
 	return await OrderModel.findByIdAndUpdate(id, orderInfo, {

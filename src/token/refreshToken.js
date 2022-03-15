@@ -7,7 +7,7 @@ module.exports.refreshToken = async (req, res) => {
 		const verified = await jwt.verify(token, app.jwt_secret);
 		if (verified) {
 			const newToken = await jwt.sign({ data: verified.data }, app.jwt_secret, {
-				expiresIn: "5h",
+				expiresIn: "5d",
 			});
 			return res.status(200).json(newToken);
 		}
