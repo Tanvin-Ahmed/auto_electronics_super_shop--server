@@ -92,7 +92,9 @@ module.exports.UpdateUser = async (req, res) => {
 
 module.exports.GetAllUsers = async (req, res) => {
 	try {
-		const allUsers = await getAllUsers();
+		const page = Number(req.query.page);
+		const limit = Number(req.query.limit);
+		const allUsers = await getAllUsers(page, limit);
 		return res.status(200).json(allUsers);
 	} catch (error) {
 		return res.status(404).json({ message: "Ops! Users not found", error });

@@ -22,6 +22,11 @@ module.exports.deleteUser = async id => {
 };
 
 //************ For Admin ************//
-module.exports.getAllUsers = async () => {
-	return await UserModel.find({}).select("-password");
+module.exports.getAllUsers = async (page, limit) => {
+	const count = await UserModel.countDocuments({});
+	const users = await UserModel.find({})
+		.limit(limit)
+		.skip((page - 1) * limit)
+		.select("-password");
+	return { users, page, pages: Math.ceil(count / limit) };
 };
