@@ -27,3 +27,12 @@ module.exports.updateOrder = async orderInfo => {
 module.exports.deleteOrder = async id => {
 	return await OrderModel.findByIdAndDelete(id);
 };
+
+// * admin
+module.exports.getOrders = async (limit, page) => {
+	const count = await OrderModel.countDocuments({});
+	const orders = await OrderModel.find({})
+		.limit(limit)
+		.skip((page - 1) * limit);
+	return { orders, page, pages: Math.ceil(count / limit) };
+};

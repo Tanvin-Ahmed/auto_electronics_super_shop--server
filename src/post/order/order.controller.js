@@ -4,6 +4,7 @@ const {
 	getOrder,
 	updateOrder,
 	getMyOrders,
+	getOrders,
 } = require("./order.service");
 
 module.exports.CreateOrder = async (req, res) => {
@@ -58,6 +59,18 @@ module.exports.GetMyOrders = async (req, res) => {
 	try {
 		const user = mongoose.Types.ObjectId(req.user._id);
 		const orders = await getMyOrders(user);
+		return res.status(200).json(orders);
+	} catch (error) {
+		return res.status(404).json({ message: "Ops! Orders not found" });
+	}
+};
+
+// * admin
+module.exports.GetOrders = async (req, res) => {
+	try {
+		const pageNumber = Number(req.query.page);
+		const limit = Number(req.query.limit);
+		const orders = await getOrders(limit, pageNumber);
 		return res.status(200).json(orders);
 	} catch (error) {
 		return res.status(404).json({ message: "Ops! Orders not found" });
