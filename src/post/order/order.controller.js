@@ -15,7 +15,6 @@ module.exports.CreateOrder = async (req, res) => {
 		const createdOrder = await createOrder(orderInfo);
 		return res.status(201).json(createdOrder);
 	} catch (error) {
-		console.log(error);
 		return res.status(500).json({ message: "Ops! Order not created" });
 	}
 };

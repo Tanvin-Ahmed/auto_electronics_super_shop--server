@@ -6,6 +6,9 @@ const {
 	UpdateProduct,
 	DeleteSingleProduct,
 	DeleteProducts,
+	AddProductReview,
+	GetSearchedProducts,
+	GetTopRatedProducts,
 } = require("../post/product/product.controller");
 const { verifyToken } = require("../token/verifyToken");
 const { isAdmin } = require("../middleware/authMiddleware");
@@ -14,6 +17,8 @@ const Router = express.Router();
 
 Router.get("/get-single/:id", GetSingleProduct);
 Router.get("/get-many/:limit/:page", GetProducts);
+Router.get("/get-top-rated", GetTopRatedProducts);
+Router.put("/add-review/:id", verifyToken, AddProductReview);
 
 //* admin routes */
 Router.post("/admin/add", verifyToken, isAdmin, AddProduct);
