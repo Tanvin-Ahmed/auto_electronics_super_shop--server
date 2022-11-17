@@ -13,6 +13,13 @@ module.exports.getOrder = async id => {
 	});
 };
 
+module.exports.getOrderByTranId = async transactionId => {
+	return await OrderModel.findOne({ transactionId }).populate({
+		path: `${app.user_collection}`,
+		select: "email name",
+	});
+};
+
 module.exports.getMyOrders = async user => {
 	return await OrderModel.find({ user });
 };
@@ -20,6 +27,12 @@ module.exports.getMyOrders = async user => {
 module.exports.updateOrder = async orderInfo => {
 	const id = mongoose.Types.ObjectId(orderInfo._id);
 	return await OrderModel.findByIdAndUpdate(id, orderInfo, {
+		new: true,
+	});
+};
+
+module.exports.updateOrderPayment = async (transactionId, orderInfo) => {
+	return await OrderModel.findOneAndUpdate({ transactionId }, orderInfo, {
 		new: true,
 	});
 };

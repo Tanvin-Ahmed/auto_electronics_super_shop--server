@@ -9,9 +9,10 @@ const indexRouter = require("./src/routes/index");
 const usersRouter = require("./src/routes/users");
 const productsRouter = require("./src/routes/productRoutes");
 const orderRouter = require("./src/routes/orderRoutes");
+const feedbackRouter = require("./src/routes/feedback");
 const {
-	pathNotFound,
-	errorHandler,
+  pathNotFound,
+  errorHandler,
 } = require("./src/middleware/errorhandlerMiddleware");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/product", productsRouter);
 app.use("/order", orderRouter);
+app.use("/feedback", feedbackRouter);
 
 // Error handler
 app.use(pathNotFound);

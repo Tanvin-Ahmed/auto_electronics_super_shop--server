@@ -1,6 +1,7 @@
 const express = require("express");
 const { isAdmin } = require("../middleware/authMiddleware");
 const { makePaymentIntent } = require("../paymentMethod/payWithStripe");
+const { PaymentInit, Success } = require("../paymentMethod/sslcommerz");
 const {
 	CreateOrder,
 	GetOrder,
@@ -15,9 +16,13 @@ route.post("/make-order", verifyToken, CreateOrder);
 route.get("/get/:id", verifyToken, GetOrder);
 route.get("/get-my-orders", verifyToken, GetMyOrders);
 
-// payment
+// payment with stripe
 route.post("/create-payment-intent", verifyToken, makePaymentIntent);
 route.put("/pay/:id", verifyToken, UpdateOrderToPaid);
+
+// payment with sslcommerz
+route.post("/create-payment-ssl", verifyToken, PaymentInit);
+route.post("/ssl-payment/success", Success);
 
 // * admin
 route.get("/admin/get-all", verifyToken, isAdmin, GetOrders);

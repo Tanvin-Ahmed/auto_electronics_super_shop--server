@@ -29,7 +29,7 @@ const OrderSchema = new mongoose.Schema(
 		},
 		paymentMethod: { type: String, required: true },
 		paymentResult: {
-			id: { type: String  },
+			id: { type: String },
 			status: { type: String },
 			updateTime: { type: String },
 			emailAddress: { type: String },
@@ -45,6 +45,8 @@ const OrderSchema = new mongoose.Schema(
 			type: Date,
 			default: new Date().toUTCString(),
 		},
+		transactionId: { type: String, default: "" },
+		valId: { type: String, default: "" },
 	},
 	{ timestamps: true, versionKey: false }
 );
